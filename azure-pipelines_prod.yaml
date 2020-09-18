@@ -2,11 +2,14 @@
 # Add steps that test, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/go
 
+# specific branch build
 trigger:
   branches:
     include:
-    - develop
-    - feature/*
+    - master
+    - releases/*
+    exclude:
+    - releases/old*
   paths:
     exclude:
     - doc/*
