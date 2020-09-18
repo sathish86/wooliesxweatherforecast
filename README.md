@@ -28,7 +28,7 @@ To achieve deployment of weather forecast solution deployment, we used below des
     - IAAC file `azuredeploy.json` contains the resource deployment of Azure APP service which pull the image from docker hub and run the application as a container.
 
   - APIKeySecret security
-    - To keep the secret variable we used Azure Devops tool Library variable group. In the pipeline file it passes the value as parameter to ARM tempalte and in the deployment, it sets the environment variable in APP service and eventually used by container. 
+    - To keep the secret variable we used Azure Devops tool Library variable group. In the pipeline file it passes the value as parameter to ARM template, when it deploys the resource it sets the environment variable in APP service and eventually used by container. 
     - `NOTE:` I would prefer to keep the secret in Azure Key Vault and refer it in ARM template.
 
   - Azure Devops used for CI/CD release pipeline
