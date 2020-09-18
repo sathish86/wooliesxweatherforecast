@@ -1,0 +1,39 @@
+# Deploy wooliesX weatherforecast.
+# Add steps that test, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/go
+
+trigger:
+  branches:
+    include:
+    - develop
+    - feature/*
+  paths:
+    exclude:
+    - doc/*
+
+variables:
+- group: wooliesx-techchallenge-variables-dev
+
+# pool:
+#    vmImage: 'ubuntu-latest'
+
+stages:
+- stage: DeployToAzure
+  displayName: "Deploy App to Azure App Service"
+  jobs:
+  - job: DeployToAzure
+    displayName: 'Deploy App to Azure App Service'
+    pool:
+      vmImage: 'Ubuntu 18.04'
+    steps:
+    - task: AzureResourceGroupDeployment@2
+      inputs:
+        azureSubscription: 'HR-Dev-Sub'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'wooliesx-tech-challenge-dev'
+        location: 'westeurope'
+        templateLocation: 'Linked artifact'
+        csmFile: 'azuredeploy.json'
+        overrideParameters: '-environment_type dev -siteName wooliesx-techchallenge  -techchallengeappImageVersion $(ImageVersion) -APIKeySecret $(APIKeySecret)'
+        deploymentMode: 'Incremental'
+      displayName: 'Create or Update Azure Resource Group'

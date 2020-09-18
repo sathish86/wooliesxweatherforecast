@@ -1,0 +1,62 @@
+# Deploy wooliesX weatherforecast.
+# Add steps that test, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/go
+
+# specific branch build
+trigger:
+  branches:
+    include:
+    - master
+    - releases/*
+    exclude:
+    - releases/old*
+  paths:
+    exclude:
+    - doc/*
+
+variables:
+- group: wooliesx-techchallenge-variables-prod
+
+# pool:
+#    vmImage: 'ubuntu-latest'
+
+stages:
+- stage: DeployToAzureUAT
+  displayName: "Deploy App to Azure App Service UAT"
+  jobs:
+  - job: DeployToAzureUAT
+    displayName: 'Deploy App to Azure App Service UAT'
+    pool:
+      vmImage: 'Ubuntu 18.04'
+    steps:
+    - task: AzureResourceGroupDeployment@2
+      inputs:
+        azureSubscription: 'HR-Dev-Sub'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'servian-tech-challenge-uat'
+        location: 'eastus2'
+        templateLocation: 'Linked artifact'
+        csmFile: 'azuredeploy.json'
+        overrideParameters: '-environment_type uat -siteName wooliesx-techchallenge  -techchallengeappImageVersion $(ImageVersion) -APIKeySecret $(APIKeySecret)'
+        deploymentMode: 'Incremental'
+      displayName: 'Create or Update Azure Resource Group'
+
+- stage: DeployToAzure
+  displayName: "Deploy App to Azure App Service"
+  jobs:
+  - job: DeployToAzure
+    displayName: 'Deploy App to Azure App Service'
+    pool:
+      vmImage: 'Ubuntu 18.04'
+    steps:
+    - task: AzureResourceGroupDeployment@2
+      inputs:
+        azureSubscription: 'HR-Dev-Sub'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'wooliesx-tech-challenge-prod'
+        location: 'westeurope'
+        templateLocation: 'Linked artifact'
+        csmFile: 'azuredeploy.json'
+        overrideParameters: '-environment_type prod -siteName wooliesx-techchallenge  -techchallengeappImageVersion $(ImageVersion) -APIKeySecret $(APIKeySecret)'
+        deploymentMode: 'Incremental'
+      displayName: 'Create or Update Azure Resource Group'
