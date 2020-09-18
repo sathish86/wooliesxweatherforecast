@@ -34,6 +34,6 @@ stages:
         location: 'westeurope'
         templateLocation: 'Linked artifact'
         csmFile: 'azuredeploy.json'
-        overrideParameters: '-environment_type dev -siteName wooliesx-techchallenge  -techchallengeappImageVersion $(ImageVersion)'
+        overrideParameters: '-environment_type dev -siteName wooliesx-techchallenge  -techchallengeappImageVersion $(ImageVersion) -APIKeySecret $(APIKeySecret)'
         deploymentMode: 'Incremental'
       displayName: 'Create or Update Azure Resource Group'
