@@ -41,11 +41,11 @@ stages:
         deploymentMode: 'Incremental'
       displayName: 'Create or Update Azure Resource Group'
 
-- stage: DeployToAzure
-  displayName: "Deploy App to Azure App Service"
+- stage: DeployToAzurePROD
+  displayName: "Deploy App to Azure App Service PROD" 
   jobs:
-  - job: DeployToAzure
-    displayName: 'Deploy App to Azure App Service'
+  - job: DeployToAzurePROD
+    displayName: 'Deploy App to Azure App Service PROD'
     pool:
       vmImage: 'Ubuntu 18.04'
     steps:
@@ -57,6 +57,6 @@ stages:
         location: 'westeurope'
         templateLocation: 'Linked artifact'
         csmFile: 'azuredeploy.json'
-        overrideParameters: '-environment_type prod -siteName wooliesx-techchallenge  -techchallengeappImageVersion $(ImageVersion) -APIKeySecret $(APIKeySecret)'
+        overrideParameters: '-servicePlanPricingTier B1 -environment_type prod -siteName wooliesx-techchallenge  -techchallengeappImageVersion $(ImageVersion) -APIKeySecret $(APIKeySecret)'
         deploymentMode: 'Incremental'
       displayName: 'Create or Update Azure Resource Group'
