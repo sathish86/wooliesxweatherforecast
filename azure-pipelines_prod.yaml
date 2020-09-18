@@ -33,7 +33,7 @@ stages:
       inputs:
         azureSubscription: 'HR-Dev-Sub'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: 'servian-tech-challenge-uat'
+        resourceGroupName: 'wooliesx-tech-challenge-uat'
         location: 'eastus2'
         templateLocation: 'Linked artifact'
         csmFile: 'azuredeploy.json'
