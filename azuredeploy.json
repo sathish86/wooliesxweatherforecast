@@ -62,11 +62,10 @@
             ],
             "properties": {
                 "siteConfig": {
-                    "appSettings": [
-                                    {
-                                        "name": "APIKEY",
-                                        "value": "[parameters('APIKeySecret')]"
-                                    }],
+                    "appSettings": [{
+                        "name": "APIKEY",
+                        "value": "[parameters('APIKeySecret')]"
+                    }],
                     "linuxFxVersion": "[concat('DOCKER|',variables('imageName'),':',parameters('techchallengeappImageVersion'))]",
                 },
                 "name": "[variables('appserviceSiteName')]",
