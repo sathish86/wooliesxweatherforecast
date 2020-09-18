@@ -62,11 +62,11 @@
             ],
             "properties": {
                 "siteConfig": {
+                    "linuxFxVersion": "[concat('DOCKER|',variables('imageName'),':',parameters('techchallengeappImageVersion'))]",
                     "appSettings": [{
                         "name": "APIKEY",
                         "value": "[parameters('APIKeySecret')]"
-                    }],
-                    "linuxFxVersion": "[concat('DOCKER|',variables('imageName'),':',parameters('techchallengeappImageVersion'))]",
+                    }]
                 },
                 "name": "[variables('appserviceSiteName')]",
                 "serverFarmId": "[variables('hostingPlanName')]",
