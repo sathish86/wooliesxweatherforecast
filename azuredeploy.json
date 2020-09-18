@@ -1,0 +1,99 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "siteName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of azure web app"
+            }
+        },
+        "techchallengeappImageVersion" :{
+            "type" : "string"
+        },
+        "servicePlanPricingTier":{
+            "type" : "string",
+            "allowedValues": [
+                "F1",
+                "B1",
+                "S1"
+            ],
+            "defaultValue": "F1"
+        },
+        "servicePlanCapacity":{
+            "type": "int",
+            "defaultValue": 1,
+            "minValue": 1,
+            "maxValue": 3
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "environment_type": {
+            "type": "string",
+            "defaultValue": "dev",
+            "metadata": {
+                "description": "Environment type dev, test or prod"
+            }
+        },
+        "APIKeySecret": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "API key secret to run application"
+            }
+        }
+    },
+    "variables": {
+        "imageName": "dfranciswoolies/ciarecruitment-bestapiever",
+        "hostingPlanName": "[concat(parameters('siteName'), 'serviceplan', '-', parameters('environment_type'))]",
+        "appserviceSiteName": "[concat(parameters('siteName'),'-', parameters('environment_type'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "name": "[variables('appserviceSiteName')]",
+            "dependsOn": [
+                "[variables('hostingPlanName')]"
+            ],
+            "properties": {
+                "siteConfig": {
+                    "appSettings": [
+                                    {
+                                        "name": "APIKEY",
+                                        "value": "[parameters('APIKeySecret')]"
+                                    }],
+                    "linuxFxVersion": "[concat('DOCKER|',variables('imageName'),':',parameters('techchallengeappImageVersion'))]",
+                },
+                "name": "[variables('appserviceSiteName')]",
+                "serverFarmId": "[variables('hostingPlanName')]",
+                "hostingEnvironment": ""
+            },
+            "apiVersion": "2016-03-01",
+            "location": "[parameters('location')]"
+        },
+        {
+            "apiVersion": "2016-09-01",
+            "name": "[variables('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "properties": {
+                "name": "[variables('hostingPlanName')]",
+                "workerSizeId": "1",
+                "reserved": true,
+                "numberOfWorkers": "1",
+                "hostingEnvironment": ""
+            },
+            "sku": {
+                // "Tier": "Standard",
+                "name": "[parameters('servicePlanPricingTier')]",
+                "capacity": "[parameters('servicePlanCapacity')]"
+            },
+            "kind": "linux"
+        }
+    ]
+}
