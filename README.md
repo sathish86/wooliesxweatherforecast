@@ -9,7 +9,7 @@ Need to have below tools and cloud access to deploy the application
 
 ## High Level Architecture
 
-  <img width="460" height="300" src="/doc/images/AzureDeployTechChallenge.png">
+  <img width="460" height="300" src="/doc/images/tech_challenge_arch.png">
 
 
 ## Steps to provision and deploy the solution
